@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>סוגרים</title>
+<meta name="description" content="הצעת מחיר שנראית מקצועית, תוך שתי דקות. עם מע״מ מחושב, PDF, וואטסאפ והודעת תזכורת. חינם, בלי הרשמה.">
+<meta property="og:title" content="סוגרים: הצעת מחיר שנראית מקצועית, תוך שתי דקות">
+<meta property="og:description" content="מקלידים את הפרטים, וההצעה מתקתקת את עצמה. חינם, בלי הרשמה.">
+<meta name="theme-color" content="#14213D">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans+Hebrew:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* Layout: form on the right, the live quote (a sheet of paper) on the left; phone stacks them. */
+  :root {
+    --desk: #E4E8EC;
+    --panel: #FFFFFF;
+    --paper: #FFFFFF;
+    --ink: #14213D;
+    --ink-soft: #4A5670;
+    --line: #CBD2DA;
+    --field: #F3F5F8;
+    --accent: #1F6F5C;
+    --accent-ink: #FFFFFF;
+    --flag: #F2B705;
+    --serif: "Frank Ruhl Libre", "IBM Plex Sans Hebrew", serif;
+    --body: "IBM Plex Sans Hebrew", system-ui, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --desk: #0F1626; --panel: #18213A; --ink: #EEF1F6; --ink-soft: #A7B1C4;
+      --line: #2C3753; --field: #202B47; --accent: #3CB495; --accent-ink: #0F1626; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --desk: #0F1626; --panel: #18213A; --ink: #EEF1F6; --ink-soft: #A7B1C4;
+    --line: #2C3753; --field: #202B47; --accent: #3CB495; --accent-ink: #0F1626; color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--desk); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; padding-bottom: 84px; }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 0 16px; }
+
+  header { padding: 28px 0 6px; }
+  .eyebrow { display: inline-block; background: var(--accent); color: var(--accent-ink); font-weight: 700; font-size: 13px; padding: 2px 10px; border-radius: 4px; }
+  h1 { font-family: var(--serif); font-weight: 700; font-size: clamp(36px, 9vw, 54px); line-height: 1.05; margin: 12px 0 8px; }
+  .lede { color: var(--ink-soft); margin: 0; max-width: 46ch; }
+
+  .demo-note {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px;
+    margin: 18px 0 0; padding: 10px 14px; border-radius: 10px; font-size: 15px;
+    background: color-mix(in srgb, var(--flag) 22%, var(--panel)); border: 1px solid var(--flag);
+  }
+  .btn-ghost { font: 500 14px var(--body); color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 6px 12px; cursor: pointer; }
+  .btn-ghost:hover { border-color: var(--ink-soft); }
+
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 18px 16px 8px; margin: 18px 0 0; }
+  .card h2 { font-size: 18px; margin: 0 0 10px; }
+  .row { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; }
+  .row > * { min-width: 0; }
+  .f { margin-bottom: 12px; }
+  .f.full { grid-column: 1 / -1; }
+  label, .lbl { display: block; font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  .hint { color: var(--ink-soft); font-size: 13px; margin: 4px 0 0; }
+  input[type=text], input[type=tel], input[type=email], input[type=number], input[type=date], textarea, select {
+    width: 100%; font: 15px var(--body); color: var(--ink); background: var(--field);
+    border: 1px solid var(--line); border-radius: 8px; padding: 9px 10px;
+  }
+  textarea { min-height: 64px; resize: vertical; }
+  input:focus, textarea:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  input[type=number] { direction: ltr; text-align: right; font-family: var(--mono); }
+
+  .items { display: grid; gap: 8px; }
+  .item { display: grid; grid-template-columns: 1fr 62px 100px 32px; gap: 6px; align-items: center; }
+  .item > * { min-width: 0; }
+  .item-head { font-size: 12px; color: var(--ink-soft); display: grid; grid-template-columns: 1fr 62px 100px 32px; gap: 6px; }
+  .x { width: 32px; height: 36px; border: 1px solid var(--line); background: var(--panel); color: var(--ink-soft); border-radius: 8px; cursor: pointer; font-size: 18px; line-height: 1; }
+  .x:hover { color: #C0392B; border-color: #C0392B; }
+  .add { margin: 10px 0 12px; }
+
+  .logo-row { display: flex; align-items: center; gap: 12px; }
+  .logo-prev { width: 56px; height: 56px; border-radius: 8px; border: 1px dashed var(--line); display: grid; place-items: center; overflow: hidden; background: var(--field); font-size: 11px; color: var(--ink-soft); text-align: center; }
+  .logo-prev img { max-width: 100%; max-height: 100%; }
+  .file-btn { position: relative; overflow: hidden; }
+  .file-btn input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+  .toggle { display: flex; align-items: center; gap: 8px; font-weight: 500; margin-bottom: 12px; cursor: pointer; }
+  .toggle input { width: 18px; height: 18px; accent-color: var(--accent); }
+
+  .ai-btn { margin-top: 6px; }
+
+  /* the quote itself: always a white sheet of paper, in both themes */
+  .sheet-wrap { margin: 26px 0 0; }
+  .sheet-label { font-size: 14px; color: var(--ink-soft); margin: 0 0 8px; }
+  .sheet {
+    background: #FFFFFF; color: #1B2232; border-radius: 6px; padding: 30px 26px 26px;
+    box-shadow: 0 1px 2px rgba(20,33,61,.08), 0 12px 32px rgba(20,33,61,.14);
+    font-size: 14px; line-height: 1.6;
+  }
+  .q-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; border-bottom: 2px solid #1B2232; padding-bottom: 14px; }
+  .q-biz { display: flex; gap: 12px; align-items: center; min-width: 0; }
+  .q-biz img { max-width: 72px; max-height: 56px; }
+  .q-biz b { font-family: var(--serif); font-size: 20px; display: block; line-height: 1.2; }
+  .q-biz span { color: #5A6478; font-size: 12.5px; display: block; overflow-wrap: anywhere; }
+  .q-meta { text-align: left; font-size: 12.5px; color: #5A6478; white-space: nowrap; }
+  .q-meta strong { display: block; font-family: var(--serif); font-size: 22px; color: #1B2232; }
+  .q-to { margin: 16px 0 0; }
+  .q-sec { margin: 18px 0 0; }
+  .q-sec h3 { font-family: var(--serif); font-size: 16px; margin: 0 0 6px; color: #1F6F5C; }
+  .q-sec p { margin: 0; white-space: pre-wrap; }
+  .q-option { font-weight: 700; margin: 0 0 6px; }
+  .q-badge { display: inline-block; font-size: 11px; font-weight: 700; color: #FFFFFF; background: #1F6F5C; border-radius: 4px; padding: 1px 7px; margin-right: 6px; vertical-align: 2px; }
+  table.q-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .q-table th { text-align: right; font-weight: 500; color: #5A6478; border-bottom: 1px solid #C9D0DA; padding: 6px 4px; font-size: 12.5px; }
+  .q-table td { padding: 7px 4px; border-bottom: 1px solid #EEF1F5; vertical-align: top; }
+  .q-table .n { text-align: left; font-variant-numeric: tabular-nums; white-space: nowrap; direction: ltr; }
+  .q-sum { margin: 8px 0 0 auto; width: min(100%, 260px); font-size: 13.5px; }
+  .q-sum div { display: flex; justify-content: space-between; padding: 3px 4px; }
+  .q-sum .n { font-variant-numeric: tabular-nums; direction: ltr; }
+  .q-sum .total { border-top: 2px solid #1B2232; margin-top: 4px; padding-top: 6px; font-weight: 700; font-size: 15.5px; }
+  .q-list { margin: 0; padding-right: 18px; }
+  .q-foot { margin: 22px 0 0; padding-top: 10px; border-top: 1px solid #C9D0DA; font-size: 12px; color: #5A6478; }
+  .ph { color: #B25E00; background: #FFF4DC; border-radius: 3px; padding: 0 3px; }
+
+  .actions { display: grid; gap: 10px; margin: 18px 0 0; }
+  .cta { display: block; width: 100%; padding: 14px; border: 0; border-radius: 12px; background: var(--accent); color: var(--accent-ink); font: 700 17px var(--body); cursor: pointer; text-align: center; }
+  .cta:hover { filter: brightness(1.06); }
+  .cta2 { display: block; width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); font: 500 16px var(--body); cursor: pointer; }
+  .cta2:hover { border-color: var(--ink-soft); }
+  .cta:focus-visible, .cta2:focus-visible, .btn-ghost:focus-visible, .x:focus-visible { outline: 2px solid var(--flag); outline-offset: 2px; }
+  .done { color: var(--accent) !important; border-color: var(--accent) !important; }
+
+  .followup { margin: 22px 0 0; }
+  .followup h2 { font-size: 18px; margin: 0 0 4px; }
+  .bubble { background: var(--field); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; white-space: pre-wrap; margin: 8px 0 10px; }
+
+  .me { margin: 28px 0 0; padding: 16px; border-radius: 14px; background: var(--ink); color: var(--panel); }
+  .me p { margin: 0 0 8px; }
+  .me a { color: var(--flag); font-weight: 500; }
+  footer { padding: 22px 0 10px; color: var(--ink-soft); font-size: 13px; }
+
+  .live { position: fixed; inset: auto 0 0 0; background: var(--ink); color: var(--panel); z-index: 5; transition: transform .25s ease; }
+  .live.hide { transform: translateY(110%); }
+  .live .wrap { display: flex; justify-content: space-between; align-items: center; padding-top: 12px; padding-bottom: 14px; }
+  .live b { font-family: var(--mono); font-size: 18px; direction: ltr; }
+  .live a { color: var(--flag); font-weight: 500; }
+
+  @media (min-width: 980px) {
+    body { padding-bottom: 0; }
+    .wrap { max-width: 1180px; padding: 0 32px; }
+    .layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 36px; align-items: start; }
+    .right-col { position: sticky; top: 20px; }
+    .sheet-wrap { margin-top: 18px; }
+    .live { display: none; }
+  }
+  @media (max-width: 420px) {
+    .row { grid-template-columns: 1fr; }
+    .sheet { padding: 22px 16px; }
+    .item, .item-head { grid-template-columns: 1fr 50px 84px 32px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .live { transition: none; } }
+
+  @media print {
+    @page { size: A4; margin: 14mm; }
+    body { background: #FFFFFF; padding: 0; }
+    body * { visibility: hidden; }
+    #sheet, #sheet * { visibility: visible; }
+    #sheet { position: absolute; inset: 0 0 auto 0; box-shadow: none; padding: 0; border-radius: 0; }
+    .live { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="eyebrow">סוגרים · חינם, בלי הרשמה</span>
+    <h1>הצעת מחיר שנראית מקצועית, תוך שתי דקות</h1>
+    <p class="lede">אתם מקלידים את הפרטים, וההצעה מתקתקת את עצמה: עם מע״מ מחושב, מסודרת ל-PDF ומוכנה לשליחה בוואטסאפ.</p>
+    <div class="demo-note" id="demo-note">
+      <span>שמנו כאן הצעה לדוגמה כדי שתראו איך זה עובד. פשוט תחליפו בפרטים שלכם.</span>
+      <button class="btn-ghost" type="button" id="clear">איפוס הטופס</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <main>
+      <section class="card">
+        <h2>העסק שלכם</h2>
+        <div class="row">
+          <div class="f full">
+            <span class="lbl">לוגו (אם יש)</span>
+            <div class="logo-row">
+              <div class="logo-prev" id="logo-prev">אין לוגו</div>
+              <span class="btn-ghost file-btn">העלאת לוגו<input type="file" id="logo" accept="image/*" aria-label="העלאת לוגו"></span>
+              <button class="btn-ghost" type="button" id="logo-del" hidden>הסרה</button>
+            </div>
+          </div>
+          <div class="f"><label for="biz">שם העסק שלכם</label><input type="text" id="biz"></div>
+          <div class="f"><label for="bizId">ח.פ. / ע.מ. (לא חובה)</label><input type="text" id="bizId"></div>
+          <div class="f"><label for="phone">טלפון לחזרה</label><input type="tel" id="phone" dir="ltr"></div>
+          <div class="f"><label for="email">מייל (לא חובה)</label><input type="email" id="email" dir="ltr"></div>
+        </div>
+        <p class="hint" style="margin:-4px 0 12px">הפרטים והלוגו נשמרים אצלכם במכשיר, לפעמים הבאות.</p>
+      </section>
+
+      <section class="card">
+        <h2>הלקוח</h2>
+        <div class="row">
+          <div class="f"><label for="client">שם הלקוח או החברה</label><input type="text" id="client"></div>
+          <div class="f"><label for="contact">איש קשר (לא חובה)</label><input type="text" id="contact"></div>
+          <div class="f full">
+            <label for="pain">מה מציק ללקוח, במילים שלו</label>
+            <textarea id="pain"></textarea>
+            <p class="hint">משפט אחד או שניים. כשההצעה נפתחת בבעיה שלו ולא ישר במחיר, הרבה יותר קל לסגור.</p>
+            <button class="btn-ghost ai-btn" type="button" id="ai">✨ העתקת פרומפט, שה-AI ינסח לכם את זה</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>מה מציעים</h2>
+        <div class="f"><label for="optTitle">כותרת להצעה (מה עושים בגדול)</label><input type="text" id="optTitle"></div>
+        <div class="item-head" aria-hidden="true"><span>סעיף</span><span>כמות</span><span>מחיר ליחידה</span><span></span></div>
+        <div class="items" id="items"></div>
+        <button class="btn-ghost add" type="button" id="add">+ הוספת סעיף</button>
+
+        <label class="toggle"><input type="checkbox" id="alt"> להוסיף אפשרות בסיסית וזולה יותר (לא חובה)</label>
+        <div id="alt-box" hidden>
+          <div class="row">
+            <div class="f"><label for="altTitle">שם האפשרות הבסיסית</label><input type="text" id="altTitle"></div>
+            <div class="f"><label for="altPrice">מחיר</label><input type="number" id="altPrice" min="0" step="any"></div>
+            <div class="f full"><label for="altDesc">מה כלול בה</label><input type="text" id="altDesc"></div>
+          </div>
+        </div>
+        <p class="hint" style="margin:0 0 12px">הכי עובד: הצעה אחת מומלצת, ומקסימום עוד חלופה קלה. שלוש רמות רק מבלבלות.</p>
+      </section>
+
+      <section class="card">
+        <h2>תנאים שחשוב לסגור מראש</h2>
+        <div class="row">
+          <div class="f">
+            <label for="vat">המחירים שציינתם</label>
+            <select id="vat">
+              <option value="plus">לפני מע״מ (יתווסף בחשבון)</option>
+              <option value="incl">כוללים מע״מ</option>
+              <option value="exempt">עוסק פטור (ללא מע״מ)</option>
+            </select>
+          </div>
+          <div class="f"><label for="vatRate">מע״מ (%)</label><input type="number" id="vatRate" min="0" max="50" step="0.5" value="18"></div>
+          <div class="f"><label for="num">מספר הצעה (לסדר שלכם)</label><input type="text" id="num" dir="ltr"></div>
+          <div class="f"><label for="valid">ההצעה בתוקף עד</label><input type="date" id="valid"></div>
+          <div class="f full">
+            <label for="pay">איך ומתי משלמים</label>
+            <input type="text" id="pay" list="pay-list">
+            <datalist id="pay-list">
+              <option value="50% מקדמה בתחילת העבודה, היתרה במסירה"></option>
+              <option value="שוטף + 30"></option>
+              <option value="תשלום אחד במסירה"></option>
+              <option value="העברה בנקאית תוך 7 ימים מקבלת חשבונית"></option>
+            </datalist>
+          </div>
+          <div class="f full"><label for="excluded">מה לא כלול (שורה לכל דבר)</label><textarea id="excluded"></textarea><p class="hint">הסעיף שחוסך הכי הרבה אי הבנות בסוף העבודה.</p></div>
+          <div class="f full"><label for="next">איך יוצאים לדרך</label><input type="text" id="next"></div>
+        </div>
+      </section>
+    </main>
+
+    <aside class="right-col">
+      <div class="sheet-wrap" id="preview">
+        <p class="sheet-label">ככה זה ייראה אצל הלקוח:</p>
+        <article class="sheet" id="sheet" aria-live="polite"></article>
+      </div>
+
+      <div class="actions">
+        <button class="cta" type="button" id="print">שמירה כ-PDF / הדפסה</button>
+        <button class="cta2" type="button" id="wa">העתקת ההצעה כטקסט לוואטסאפ</button>
+      </div>
+
+      <section class="followup">
+        <h2>עברו 3 ימים והלקוח לא חזר?</h2>
+        <p class="hint" style="margin:0">המון עסקאות נסגרות רק בזכות הודעת תזכורת. הנה אחת מוכנה לוואטסאפ:</p>
+        <div class="bubble" id="fu-text"></div>
+        <button class="cta2" type="button" id="fu">העתקת הודעת התזכורת</button>
+      </section>
+
+      <section class="me">
+        <p><b>רוצים שכל זה יקרה לבד?</b> מסיכום השיחה עם הלקוח, דרך ההצעה ועד התזכורת בוואטסאפ, בלי להקליד שוב.</p>
+        <p style="margin:0">דברו איתי ונראה איך לחבר את זה אצלכם. ועוד כלים פרקטיים כאלה יש <a id="community" href="https://chat.whatsapp.com/DNGcY3MOi7o6lhivN0Q94c?mode=gi_t" target="_blank" rel="noopener">בקהילה שלי בוואטסאפ</a></p>
+      </section>
+    </aside>
+  </div>
+
+  <footer>נבנה על ידי נתי ורדי. מה שאתם מקלידים נשאר אצלכם בדפדפן ולא נשלח לשום שרת. אנחנו רק סופרים כמה נכנסו ולחצו, בלי שום פרט מזהה. כדאי לעבור על הסכומים לפני ששולחים.</footer>
+</div>
+
+<div class="live" id="live">
+  <div class="wrap">
+    <div>סה״כ לתשלום: <b id="live-total"></b></div>
+    <a href="#preview">לתצוגת ההצעה ↓</a>
+  </div>
+</div>
+
+<script>
+  // ---------- anonymous counters (no personal data), skipped on localhost ----------
+  const COUNTER = "https://abacus.jasoncameron.dev/hit/nativardi-quote/";
+  const isLocal = ["localhost", "127.0.0.1"].includes(location.hostname);
+  const count = key => { if (!isLocal) fetch(COUNTER + key, { keepalive: true }).catch(() => {}); };
+  const counted = new Set();
+  const countOnce = key => { if (!counted.has(key)) { counted.add(key); count(key); } };
+
+  // ---------- helpers ----------
+  const $ = id => document.getElementById(id);
+  const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const money = n => "₪" + n.toLocaleString("he-IL", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const round2 = n => Math.round(n * 100) / 100;
+  const ph = text => `<span class="ph">[${esc(text)}]</span>`;
+  const orPh = (v, text) => v.trim() ? esc(v.trim()) : ph(text);
+  const fmtDate = iso => { if (!iso) return ""; const [y, m, d] = iso.split("-"); return `${d}/${m}/${y}`; };
+  const todayIso = () => new Date().toISOString().slice(0, 10);
+  const addDays = (iso, n) => { const d = new Date(iso); d.setDate(d.getDate() + n); return d.toISOString().slice(0, 10); };
+
+  const store = {
+    get(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
+  };
+
+  // ---------- example quote (clearly marked on screen) ----------
+  const EXAMPLE = {
+    biz: "סטודיו לדוגמה", bizId: "", phone: "050-0000000", email: "",
+    client: "משרד רו״ח לדוגמה", contact: "",
+    pain: "כל חודש מקלידים ידנית מאות חשבוניות ספקים למערכת, וזה לוקח לצוות כמה ימים.",
+    optTitle: "קליטת חשבוניות אוטומטית",
+    items: [["אפיון והקמת תהליך קליטה אוטומטי", 1, 4800], ["הדרכה לצוות (שעה)", 2, 300]],
+    alt: true, altTitle: "גרסה בסיסית", altPrice: 2500, altDesc: "תבנית אחידה לקליטה ידנית מהירה, בלי חיבור למערכת",
+    vat: "plus", vatRate: 18, pay: "50% מקדמה בתחילת העבודה, היתרה במסירה",
+    excluded: "רישיונות לתוכנות צד שלישי\nשינויים במערכת הנהלת החשבונות עצמה",
+    next: "מאשרים בהודעה, ונקבע פגישת התנעה באותו שבוע.",
+  };
+
+  const BIZ_FIELDS = ["biz", "bizId", "phone", "email"];
+  const TEXT_FIELDS = ["client", "contact", "pain", "optTitle", "altTitle", "altPrice", "altDesc", "vat", "vatRate", "pay", "excluded", "next", "num", "valid"];
+  let logo = null;
+
+  // ---------- line items ----------
+  function addItem(desc = "", qty = 1, price = "") {
+    const row = document.createElement("div");
+    row.className = "item";
+    row.innerHTML = `<input type="text" aria-label="תיאור הפריט" placeholder="מה כולל הסעיף">
+      <input type="number" aria-label="כמות" min="0" step="any">
+      <input type="number" aria-label="מחיר ליחידה" min="0" step="any" placeholder="0">
+      <button class="x" type="button" aria-label="מחיקת פריט">×</button>`;
+    const [d, q, p] = row.querySelectorAll("input");
+    d.value = desc; q.value = qty; p.value = price;
+    row.querySelector(".x").addEventListener("click", () => { row.remove(); render(); });
+    row.addEventListener("input", onEdit);
+    $("items").append(row);
+  }
+  const readItems = () => [...$("items").children].map(r => {
+    const [d, q, p] = r.querySelectorAll("input");
+    return { desc: d.value.trim(), qty: Number(q.value) || 0, price: Number(p.value) || 0 };
+  }).filter(i => i.desc || i.price);
+
+  // ---------- VAT ----------
+  function totals(base) {
+    const mode = $("vat").value, rate = (Number($("vatRate").value) || 0) / 100;
+    if (mode === "exempt") return { before: round2(base), vat: 0, total: round2(base), mode };
+    if (mode === "incl") { const total = round2(base), before = round2(total / (1 + rate)); return { before, vat: round2(total - before), total, mode }; }
+    const before = round2(base), vat = round2(before * rate);
+    return { before, vat, total: round2(before + vat), mode };
+  }
+  const vatLabel = () => `מע״מ ${Number($("vatRate").value) || 0}%`;
+  const sumBlock = t => t.mode === "exempt"
+    ? `<div class="total"><span>סה״כ לתשלום</span><span class="n">${money(t.total)}</span></div>`
+    : `<div><span>${t.mode === "incl" ? "לפני מע״מ" : "סה״כ לפני מע״מ"}</span><span class="n">${money(t.before)}</span></div>
+       <div><span>${vatLabel()}</span><span class="n">${money(t.vat)}</span></div>
+       <div class="total"><span>סה״כ לתשלום</span><span class="n">${money(t.total)}</span></div>`;
+
+  // ---------- render the quote ----------
+  function render() {
+    const v = id => $(id).value;
+    const items = readItems();
+    const base = items.reduce((s, i) => s + i.qty * i.price, 0);
+    const t = totals(base);
+    const altOn = $("alt").checked && (v("altTitle").trim() || Number(v("altPrice")));
+    const altT = altOn ? totals(Number(v("altPrice")) || 0) : null;
+    const excluded = v("excluded").split("\n").map(s => s.trim()).filter(Boolean);
+    const contactLine = [v("phone"), v("email")].filter(s => s.trim()).map(s => `<bdi>${esc(s.trim())}</bdi>`).join(" · ");
+
+    $("sheet").innerHTML = `
+      <div class="q-top">
+        <div class="q-biz">
+          ${logo ? `<img src="${logo}" alt="">` : ""}
+          <div><b>${orPh(v("biz"), "שם העסק")}</b>
+            <span>${contactLine}</span>
+            ${v("bizId").trim() ? `<span>ח.פ./ע.מ. <bdi>${esc(v("bizId").trim())}</bdi></span>` : ""}</div>
+        </div>
+        <div class="q-meta"><strong>הצעת מחיר</strong>
+          מס׳ <bdi>${esc(v("num"))}</bdi><br>תאריך: ${fmtDate(todayIso())}<br>תקפה עד: ${v("valid") ? fmtDate(v("valid")) : ph("תאריך")}</div>
+      </div>
+
+      <div class="q-to">לכבוד: <b>${orPh(v("client"), "שם הלקוח")}</b>${v("contact").trim() ? `, ${esc(v("contact").trim())}` : ""}</div>
+
+      ${v("pain").trim() ? `<div class="q-sec"><h3>הצורך</h3><p>${esc(v("pain").trim())}</p></div>` : ""}
+
+      <div class="q-sec"><h3>פירוט ההצעה</h3>
+        <p class="q-option">${orPh(v("optTitle"), "שם ההצעה")}${altOn ? `<span class="q-badge">מומלץ</span>` : ""}</p>
+        <table class="q-table">
+          <thead><tr><th>סעיף</th><th class="n">כמות</th><th class="n">מחיר ליחידה</th><th class="n">סה״כ</th></tr></thead>
+          <tbody>${items.length ? items.map(i => `<tr><td>${orPh(i.desc, "תיאור")}</td><td class="n">${i.qty.toLocaleString("he-IL")}</td><td class="n">${money(i.price)}</td><td class="n">${money(i.qty * i.price)}</td></tr>`).join("")
+            : `<tr><td colspan="4">${ph("הוסיפו פריט עם מחיר")}</td></tr>`}</tbody>
+        </table>
+        <div class="q-sum">${sumBlock(t)}</div>
+      </div>
+
+      ${altOn ? `<div class="q-sec"><h3>אפשרות בסיסית</h3>
+        <p class="q-option">${orPh(v("altTitle"), "שם האפשרות")}</p>
+        ${v("altDesc").trim() ? `<p>${esc(v("altDesc").trim())}</p>` : ""}
+        <div class="q-sum">${sumBlock(altT)}</div></div>` : ""}
+
+      <div class="q-sec"><h3>מה לא כלול</h3>
+        ${excluded.length ? `<ul class="q-list">${excluded.map(e => `<li>${esc(e)}</li>`).join("")}</ul>` : `<p>${ph("מה לא כלול")}</p>`}</div>
+
+      <div class="q-sec"><h3>תנאי תשלום ותוקף</h3>
+        <p>תנאי תשלום: ${orPh(v("pay"), "תנאי תשלום")}
+המחיר והתנאים תקפים עד ${v("valid") ? fmtDate(v("valid")) : ph("תאריך")}.</p></div>
+
+      ${v("next").trim() ? `<div class="q-sec"><h3>איך יוצאים לדרך</h3><p>${esc(v("next").trim())}</p></div>` : ""}
+
+      <div class="q-foot">${esc(v("biz").trim())}${contactLine ? " · " + contactLine : ""}</div>`;
+
+    $("live-total").textContent = money(t.total);
+    $("fu-text").textContent = followupText();
+    store.set("qg-business", { ...Object.fromEntries(BIZ_FIELDS.map(f => [f, v(f)])), logo });
+  }
+
+  // ---------- texts to copy ----------
+  function waText() {
+    const v = id => $(id).value.trim();
+    const items = readItems(), t = totals(items.reduce((s, i) => s + i.qty * i.price, 0));
+    const lines = [`*הצעת מחיר ${v("num")}* | ${v("biz")}`, `לכבוד: ${v("client")}`, ""];
+    if (v("pain")) lines.push(v("pain"), "");
+    lines.push(`*${v("optTitle")}*`);
+    items.forEach(i => lines.push(`• ${i.desc}${i.qty !== 1 ? ` (${i.qty} × ${money(i.price)})` : ""}: ${money(i.qty * i.price)}`));
+    lines.push(t.mode === "exempt" ? `*סה״כ: ${money(t.total)}*` : `*סה״כ: ${money(t.total)}* (כולל ${vatLabel()})`);
+    if ($("alt").checked && v("altTitle")) {
+      const a = totals(Number(v("altPrice")) || 0);
+      lines.push("", `אפשרות בסיסית: *${v("altTitle")}*${v("altDesc") ? ` (${v("altDesc")})` : ""}: ${money(a.total)}`);
+    }
+    const ex = v("excluded").split("\n").map(s => s.trim()).filter(Boolean);
+    if (ex.length) lines.push("", "לא כלול: " + ex.join(", "));
+    if (v("pay")) lines.push("", "תנאי תשלום: " + v("pay"));
+    if (v("valid")) lines.push(`בתוקף עד ${fmtDate(v("valid"))}`);
+    if (v("next")) lines.push("", v("next"));
+    return lines.join("\n");
+  }
+  function followupText() {
+    const client = $("contact").value.trim() || $("client").value.trim() || "[שם]";
+    const valid = $("valid").value ? ` (היא בתוקף עד ${fmtDate($("valid").value)})` : "";
+    return `היי ${client}, מה נשמע? רציתי לבדוק אם יצא לך להציץ בהצעה ששלחתי${valid}.\nאם יש שאלות או משהו שתרצו שנתאים, תגידו ונסדר 🙂`;
+  }
+  function aiPrompt() {
+    const v = id => $(id).value.trim();
+    const items = readItems().map(i => i.desc).filter(Boolean).join(", ");
+    return `אני ${v("biz") || "[שם העסק]"}. אני שולח הצעת מחיר ל-${v("client") || "[שם הלקוח]"}.
+מה שמציק ללקוח, במילים שלו: ${v("pain") || "[מה הלקוח אמר]"}
+מה אני מציע: ${v("optTitle") || "[שם ההצעה]"}${items ? ` (${items})` : ""}.
+
+כתוב לי פסקת פתיחה להצעה: 2-3 משפטים בעברית יומיומית, שמראים שהבנתי את הבעיה שלו ומה ישתנה אצלו.
+בלי הבטחות שלא כתבתי, בלי סופרלטיבים ובלי מחירים. רק את הפסקה, בלי הקדמה.`;
+  }
+
+  async function copy(text, btn, label) {
+    const done = () => { const old = btn.textContent; btn.textContent = "הועתק ✓"; btn.classList.add("done"); setTimeout(() => { btn.textContent = old; btn.classList.remove("done"); }, 1800); };
+    try { await navigator.clipboard.writeText(text); done(); }
+    catch {
+      const ta = Object.assign(document.createElement("textarea"), { value: text });
+      document.body.append(ta); ta.select();
+      try { document.execCommand("copy"); done(); } catch {}
+      ta.remove();
+    }
+    countOnce(label);
+  }
+
+  // ---------- logo: scaled down so it stays small in storage ----------
+  function setLogo(src) {
+    logo = src;
+    $("logo-prev").innerHTML = src ? `<img src="${src}" alt="הלוגו">` : "אין לוגו";
+    $("logo-del").hidden = !src;
+    render();
+  }
+  $("logo").addEventListener("change", e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const img = new Image();
+    img.onload = () => {
+      const scale = Math.min(1, 320 / Math.max(img.width, img.height));
+      const c = Object.assign(document.createElement("canvas"), { width: Math.round(img.width * scale), height: Math.round(img.height * scale) });
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      setLogo(c.toDataURL("image/png"));
+      URL.revokeObjectURL(img.src);
+    };
+    img.src = URL.createObjectURL(file);
+    countOnce("logo");
+  });
+  $("logo-del").addEventListener("click", () => { $("logo").value = ""; setLogo(null); });
+
+  // ---------- wiring ----------
+  function onEdit() { $("demo-note").hidden = true; countOnce("edited"); render(); }
+
+  function fill(data) {
+    [...BIZ_FIELDS, ...TEXT_FIELDS].forEach(f => { if (f in data) $(f).value = data[f]; });
+    $("items").innerHTML = "";
+    (data.items?.length ? data.items : [["", 1, ""]]).forEach(i => addItem(...i));
+    $("alt").checked = !!data.alt;
+    $("alt-box").hidden = !data.alt;
+  }
+
+  function init() {
+    const saved = store.get("qg-business");
+    fill(EXAMPLE);
+    if (saved) { BIZ_FIELDS.forEach(f => { $(f).value = saved[f] || ""; }); }
+    const now = new Date();
+    $("num").value = `${String(now.getFullYear()).slice(2)}${String(now.getMonth() + 1).padStart(2, "0")}-01`;
+    $("valid").value = addDays(todayIso(), 14);
+    if (saved?.logo) setLogo(saved.logo); else render();
+  }
+
+  document.querySelectorAll("main input:not(#logo), main textarea, main select").forEach(el => {
+    if (!el.closest(".item")) el.addEventListener("input", onEdit);
+  });
+  $("alt").addEventListener("change", () => { $("alt-box").hidden = !$("alt").checked; onEdit(); });
+  $("add").addEventListener("click", () => { addItem(); onEdit(); $("items").lastElementChild.querySelector("input").focus(); });
+  $("clear").addEventListener("click", () => {
+    ["client", "contact", "pain", "optTitle", "altTitle", "altPrice", "altDesc", "pay", "excluded", "next"].forEach(f => $(f).value = "");
+    $("items").innerHTML = ""; addItem();
+    $("alt").checked = false; $("alt-box").hidden = true;
+    if (!store.get("qg-business")?.biz || $("biz").value === EXAMPLE.biz) BIZ_FIELDS.forEach(f => $(f).value = "");
+    $("demo-note").hidden = true;
+    render();
+    $("biz").value ? $("client").focus() : $("biz").focus();
+  });
+  $("print").addEventListener("click", () => { countOnce("print"); window.print(); });
+  $("wa").addEventListener("click", e => copy(waText(), e.currentTarget, "wa"));
+  $("fu").addEventListener("click", e => copy(followupText(), e.currentTarget, "followup"));
+  $("ai").addEventListener("click", e => copy(aiPrompt(), e.currentTarget, "ai"));
+  $("community").addEventListener("click", () => countOnce("community"));
+
+  init();
+  count("opens");
+
+  // phone: sticky total until the quote is on screen
+  const toggleLive = () => $("live").classList.toggle("hide", $("preview").getBoundingClientRect().top < innerHeight * 0.8);
+  addEventListener("scroll", toggleLive, { passive: true });
+  addEventListener("resize", toggleLive);
+  toggleLive();
+</script>
+</body>
+</html>
