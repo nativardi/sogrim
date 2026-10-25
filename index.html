@@ -151,6 +151,18 @@
   .followup h2 { font-size: 18px; margin: 0 0 4px; }
   .bubble { background: var(--panel); border-radius: 18px 18px 4px 18px; box-shadow: var(--shadow); padding: 12px 14px; white-space: pre-wrap; margin: 8px 0 10px; }
 
+  .own { margin: 22px 0 0; background: var(--panel); border-radius: 20px; box-shadow: var(--shadow); padding: 4px 18px; }
+  .own summary { cursor: pointer; font-weight: 600; padding: 14px 0; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+  .own summary::-webkit-details-marker { display: none; }
+  .own summary::after { content: "+"; color: var(--accent); font-size: 22px; line-height: 1; }
+  .own[open] summary::after { content: "−"; }
+  .own summary:focus-visible { outline: 2px solid var(--accent); border-radius: 8px; }
+  .own h3 { font-size: 15px; font-weight: 600; margin: 14px 0 4px; }
+  .own p, .own ol { margin: 0 0 8px; font-size: 15px; }
+  .own ol { padding-right: 20px; }
+  .own .cta2 { margin: 6px 0 12px; text-decoration: none; text-align: center; }
+  .own a.inline { color: var(--accent); font-weight: 500; }
+
   .me { margin: 28px 0 0; padding: 18px; border-radius: 20px; background: linear-gradient(135deg, #5B5BD6, #7C5BD6); color: #FFFFFF; }
   .me p { margin: 0 0 8px; }
   .me a { color: #FFFFFF; font-weight: 600; }
@@ -307,6 +319,25 @@
         <div class="bubble" id="fu-text"></div>
         <button class="cta2" type="button" id="fu">העתקת הודעת התזכורת</button>
       </section>
+
+      <details class="own" id="own">
+        <summary>רוצים את סוגרים אצלכם?</summary>
+
+        <h3>📱 בטלפון: אייקון במסך הבית</h3>
+        <p>ככה הוא נפתח כמו אפליקציה, בלחיצה אחת.</p>
+        <ol>
+          <li><b>אייפון (Safari):</b> כפתור השיתוף <span aria-hidden="true">⬆️</span> ← "הוספה למסך הבית".</li>
+          <li><b>אנדרואיד (Chrome):</b> שלוש הנקודות ⋮ ← "הוספה למסך הבית".</li>
+        </ol>
+
+        <h3>💻 במחשב: להוריד את הכלי</h3>
+        <p>קובץ אחד שנשמר אצלכם ונפתח בכל דפדפן, גם בלי אינטרנט. פרטי העסק והחלקים שלכם נשמרים בו בנפרד מהאתר.</p>
+        <a class="cta2" id="download" href="index.html" download="sogrim.html">הורדת סוגרים למחשב</a>
+
+        <h3>🛠️ רוצים לשנות אותו?</h3>
+        <p>הקוד פתוח וחינמי. אפשר להוריד אותו, להוסיף צבעים, שדות או לוגו קבוע, ולהעלות אותו לאתר שלכם: <a class="inline" href="https://github.com/nativardi/sogrim" target="_blank" rel="noopener">הקוד ב-GitHub</a></p>
+        <p>או שתכתבו לי, ונבנה ביחד גרסה שמחוברת למערכות שלכם.</p>
+      </details>
 
       <section class="me">
         <p><b>רוצים שכל זה יקרה לבד?</b> מסיכום השיחה עם הלקוח, דרך ההצעה ועד התזכורת בוואטסאפ, בלי להקליד שוב.</p>
@@ -610,6 +641,8 @@
   $("fu").addEventListener("click", e => copy(followupText(), e.currentTarget, "followup"));
   $("ai").addEventListener("click", e => copy(aiPrompt(), e.currentTarget, "ai"));
   $("community").addEventListener("click", () => countOnce("community"));
+  $("download").addEventListener("click", () => countOnce("download"));
+  $("own").addEventListener("toggle", () => { if ($("own").open) countOnce("own"); });
 
   init();
   count("opens");
